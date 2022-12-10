@@ -8,6 +8,15 @@ import re
 
 
 class Vacancy:
+    """
+    Класс для представления вакансий.
+
+    Attributes:
+       name (str): название вакансии
+       salary (int): зарплата
+       area_name (str): область деятельности
+       published_at (datetime): время публикации вакансии
+    """
     currency_to_rub = {
         "KGS": 0.76,
         "AZN": 35.68,
@@ -22,6 +31,12 @@ class Vacancy:
     }
 
     def __init__(self, object_vacancy):
+        """
+            Инициализирует объект класса Vacancy, инициалазируя значениями поля класса
+
+            Args:
+                object_vacancy(obj): объект, представляющий основную информацию о вакансии
+        """
         self.name = object_vacancy['name']
         salary_from = (int)((float)("".join(object_vacancy['salary_from'].split())))
         salary_to = (int)((float)("".join(object_vacancy['salary_to'].split())))
@@ -31,14 +46,45 @@ class Vacancy:
 
 
 class DataSet:
+    """
+    Класс для формирования набора данных по вакансиям
+
+    Attributes:
+        file_name(str): название файла с вакансиями
+        vacancies_objects(list): список вакансий
+    """
+
     def __init__(self, file_name: str, vacancies_objects: list):
+        """
+        Инициализирует объект DataSet под указанным именем и с переданным набором данных
+
+        Args:
+            file_name(str): название файла
+            vacancies_objects(list): список вакансий
+        """
         self.file_name = file_name
         self.vacancies_objects = vacancies_objects
 
     def refactor_html(self, raw_html):
-       return(re.compile('<.*?>'), '', raw_html)
+        """
+        Очищает текст от html-тегов
+
+        Args:
+            raw_html: html-разметка
+
+        Returns:
+            str: Очищенный от html-тегов текст
+        """
+        return (re.compile('<.*?>'), '', raw_html)
 
     def csv_read(self):
+        """
+        Считывает данные из переданного файла
+
+        Returns:
+            Tuple: пара значений(вакансия - имя вакансии)
+
+          """
         vacancies = []
         name_list = []
         with open(self.file_name, encoding='utf-8-sig') as r_file:
@@ -61,10 +107,23 @@ class DataSet:
         return (vacancies, name_list)
 
     def fill_vacancies(self):
+        """
+        Заполняет объекты вакансий полученной информацией
+        """
         (vacancies, list_naiming) = self.csv_read()
         self.vacancies_objects = self.csv_filer(vacancies, list_naiming)
-        
+
     def csv_filer(self, reader, list_naming):
+        """
+        Идёт построчно по переданному файлу и заполняет вакансии
+
+        Args:
+            reader -
+            list_naming(list) - список названий вакансий
+
+        Returns:
+            list: Список сформированных факансий
+        """
         vacancies = list()
         for row in reader:
             current = {}
@@ -74,16 +133,32 @@ class DataSet:
         return vacancies
 
 
-
 class Tuple:
+    """
+    Класс для хранения двух параметров
+
+    Attributes:
+        totalSalary(int): финальная зарплата
+        count(int): номер вакансии
+    """
     totalSalary = 0
     count = 0
+
     def __init__(self, totalSalary: int, count: int):
         self.totalSalary = totalSalary
         self.count = count
 
 
 class InputData:
+    """
+    Класс для формирования статистики по вакансиям(изменения популярности по годам, городам, профессиям)
+
+    Attributes:
+        years_stats(dict): статистика по годам
+        cities_stats(dict): статистика по городам
+        vacancy_stats(dict): статистика по профессиям
+    """
+
     years_stats = {
     }
 
@@ -94,11 +169,20 @@ class InputData:
     }
 
     def start_input(self):
+        """
+        Инициализирование данных по новой профессии
+        """
         self.file_name = input('Введите название файла: ')
         self.profession = input('Введите название профессии: ')
         self.city_count = 0
 
     def count_vacancies(self, vacancies: list):
+        """
+        Подсчёт данных по городам/годам/профессиям
+
+        Args:
+            vacancies(list): список вакансий
+        """
         for vacancy in vacancies:
             self.city_count += 1
             year = int(vacancy.published_at.year)
@@ -108,7 +192,7 @@ class InputData:
             else:
                 self.cities_stats[vacancy.area_name].totalSalary += vacancy.salary
                 self.cities_stats[vacancy.area_name].count += 1
-                
+
             if year not in self.years_stats.keys():
                 self.years_stats[year] = Tuple(vacancy.salary, 1)
                 self.vacancy_stats[year] = Tuple(0, 0)
@@ -121,6 +205,9 @@ class InputData:
                 self.vacancy_stats[year].count += 1
 
     def update_stats(self):
+        """
+        Обновление данных по городам/годам/профессиям
+        """
         for year in self.years_stats.keys():
             self.years_stats[year].totalSalary = int(self.years_stats[year].totalSalary // self.years_stats[year].count)
 
@@ -130,16 +217,25 @@ class InputData:
             if percentage < 0.01:
                 remove_data.append(city)
             else:
-                self.cities_stats[city].totalSalary = int(self.cities_stats[city].totalSalary // self.cities_stats[city].count)
+                self.cities_stats[city].totalSalary = int(
+                    self.cities_stats[city].totalSalary // self.cities_stats[city].count)
                 self.cities_stats[city].count = percentage
         for year in self.vacancy_stats.keys():
             if self.vacancy_stats[year].count != 0:
-                self.vacancy_stats[year].totalSalary = int(self.vacancy_stats[year].totalSalary // self.vacancy_stats[year].count)
+                self.vacancy_stats[year].totalSalary = int(
+                    self.vacancy_stats[year].totalSalary // self.vacancy_stats[year].count)
         for city in remove_data:
             del [self.cities_stats[city]]
 
-    
     def print_info(self, str_info: str, dict: dict, value_name: str):
+        """
+        Вывод информации-статистики по годам
+
+        Args:
+            str_info(str): краткая информация по вакансии
+            dict(dict): словарь вакансий
+            value_name(str): имя вакансии
+        """
         marker = False
         print(str_info, end='')
         ind = 0
@@ -156,6 +252,14 @@ class InputData:
             print('}')
 
     def get_city_print(self, str_data: str, dict: dict, names: list, value_name):
+        """
+        Вывод информации-статистики по городам
+
+        Args:
+            str_info(str): краткая информация по вакансии
+            dict(dict): словарь вакансий
+            names(list): список названий вакансий
+        """
         flag = False
         print(str_data, end='')
         ind = 0
@@ -172,6 +276,9 @@ class InputData:
             print('}')
 
     def get_answer(self):
+        """
+        Вывод всей сформированной информации
+        """
 
         cities_sorted = sorted(self.cities_stats, key=lambda x: self.cities_stats[x].totalSalary, reverse=True)
         self.print_info("Динамика уровня зарплат по годам:", self.years_stats, "totalSalary")
@@ -182,13 +289,22 @@ class InputData:
         self.print_info("Динамика количества вакансий по годам для выбранной профессии:", self.vacancy_stats, "count")
         del cities_sorted[10:]
         self.get_city_print("Уровень зарплат по городам (в порядке убывания):", self.cities_stats,
-                              cities_sorted, "totalSalary")
+                            cities_sorted, "totalSalary")
         cities_sorted = sorted(self.cities_stats, key=lambda x: self.cities_stats[x].count, reverse=True)
         del cities_sorted[10:]
         self.get_city_print("Доля вакансий по городам (в порядке убывания):", self.cities_stats,
-                              cities_sorted, "count")
+                            cities_sorted, "count")
 
     def get_sorted_cities(self, attr_name: str):
+        """
+        Сортирует вакансии по городам
+
+        Args:
+            attr_name(str): имя города для сортировки
+
+        Returns:
+            dic: словарь с вакансиями по городам
+        """
         current = {}
         sorted_names = sorted(self.cities_stats, key=lambda x: getattr(self.cities_stats[x], attr_name), reverse=True)
         del sorted_names[10:]
@@ -198,7 +314,17 @@ class InputData:
 
 
 class Report:
+    """
+    Класс для формирования отчёта по вакансиям
+    """
+
     def generate_excel(self, inputer: InputData):
+        """
+        Формирует отчёт в формате Excel по полученным данным
+
+        Args:
+            inputer(InputData): данные для формирования отчёта
+        """
         thin_border = Border(left=Side(style='thin'),
                              right=Side(style='thin'),
                              top=Side(style='thin'),
@@ -280,9 +406,6 @@ class Report:
         wb.save("report.xlsx")
 
 
-
-
-
 inputer = InputData()
 inputer.start_input()
 dataset = DataSet(inputer.file_name, list())
@@ -290,7 +413,6 @@ dataset.fill_vacancies()
 inputer.count_vacancies(dataset.vacancies_objects)
 inputer.update_stats()
 inputer.get_answer()
-
 report = Report()
 report.generate_excel(inputer)
 
