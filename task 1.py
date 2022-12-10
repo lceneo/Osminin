@@ -4,7 +4,9 @@ import openpyxl
 from openpyxl.styles import Font
 from openpyxl.styles.borders import Border, Side
 from builtins import input
+from unittest import TestCase, main
 import re
+from os import path
 
 
 class Vacancy:
@@ -405,7 +407,25 @@ class Report:
             ind = ind + 1
         wb.save("report.xlsx")
 
+class Tests(TestCase):
+    def test_salary1(self):
+        self.assertEqual(Vacancy({"name" = "","salary_from" = 12, "salary_to" = 35, "salary_currency" = "RUR", 
+                                  "area_name" = "", "published_at" = datetime.datetime(3,6,7,8,9,10,4)}).salary_from, 12);
+        
+    def test_salary2(self):
+        self.assertEqual(Vacancy({"name" = "","salary_from" = 12, "salary_to" = 35, "salary_currency" = "RUR", 
+                                  "area_name" = "", "published_at" = datetime.datetime(3,6,7,8,9,10,4)}).salary_to, 35);
 
+    def test_clean_html(self):
+        self.assertEqual(DataSet("", list()).cleanhtml("<tag>text</tag>"), 'text')
+
+    def test_tuple1(self):
+        self.assertEqual(Tuple(3210, 1).totalSalary, 3210)
+
+    def test_tuple_2(self):
+        self.assertEqual(Tuple(0, 42).count, 42)
+        
+ 
 inputer = InputData()
 inputer.start_input()
 dataset = DataSet(inputer.file_name, list())
