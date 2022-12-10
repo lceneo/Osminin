@@ -9,6 +9,15 @@ import re
 
 
 class Vacancy:
+    """
+       Класс для представления вакансий.
+
+       Attributes:
+          name (str): название вакансии
+          salary (int): зарплата
+          area_name (str): область деятельности
+          published_at (datetime): время публикации вакансии
+       """
     currency_to_rub = {
         "KGS": 0.76,
         "AZN": 35.68,
@@ -23,6 +32,12 @@ class Vacancy:
     }
 
     def __init__(self, object_vacancy):
+        """
+                    Инициализирует объект класса Vacancy, инициалазируя значениями поля класса
+
+                    Args:
+                        object_vacancy(obj): объект, представляющий основную информацию о вакансии
+                """
         self.name = object_vacancy['name']
         salary_from = (int)((float)("".join(object_vacancy['salary_from'].split())))
         salary_to = (int)((float)("".join(object_vacancy['salary_to'].split())))
@@ -32,14 +47,44 @@ class Vacancy:
 
 
 class DataSet:
+    """
+        Класс для формирования набора данных по вакансиям
+
+        Attributes:
+            file_name(str): название файла с вакансиями
+            vacancies_objects(list): список вакансий
+        """
     def __init__(self, file_name: str, vacancies_objects: list):
+        """
+               Инициализирует объект DataSet под указанным именем и с переданным набором данных
+
+               Args:
+                   file_name(str): название файла
+                   vacancies_objects(list): список вакансий
+               """
         self.file_name = file_name
         self.vacancies_objects = vacancies_objects
 
     def refactor_html(self, raw_html):
-       return(re.compile('<.*?>'), '', raw_html)
+        """
+                Очищает текст от html-тегов
+
+                Args:
+                    raw_html: html-разметка
+
+                Returns:
+                    str: Очищенный от html-тегов текст
+                """
+        return(re.compile('<.*?>'), '', raw_html)
 
     def csv_read(self):
+        """
+               Считывает данные из переданного файла
+
+               Returns:
+                   Tuple: пара значений(вакансия - имя вакансии)
+
+                 """
         vacancies = []
         name_list = []
         with open(self.file_name, encoding='utf-8-sig') as r_file:
@@ -62,10 +107,23 @@ class DataSet:
         return (vacancies, name_list)
 
     def fill_vacancies(self):
+        """
+               Заполняет объекты вакансий полученной информацией
+               """
         (vacancies, list_naiming) = self.csv_read()
         self.vacancies_objects = self.csv_filer(vacancies, list_naiming)
         
     def csv_filer(self, reader, list_naming):
+        """
+               Идёт построчно по переданному файлу и заполняет вакансии
+
+               Args:
+                   reader -
+                   list_naming(list) - список названий вакансий
+
+               Returns:
+                   list: Список сформированных факансий
+               """
         vacancies = list()
         for row in reader:
             current = {}
@@ -77,6 +135,13 @@ class DataSet:
 
 
 class Tuple:
+    """
+       Класс для хранения двух параметров
+
+       Attributes:
+           totalSalary(int): финальная зарплата
+           count(int): номер вакансии
+       """
     totalSalary = 0
     count = 0
     def __init__(self, totalSalary: int, count: int):
@@ -85,6 +150,14 @@ class Tuple:
 
 
 class InputData:
+    """
+        Класс для формирования статистики по вакансиям(изменения популярности по годам, городам, профессиям)
+
+        Attributes:
+            years_stats(dict): статистика по годам
+            cities_stats(dict): статистика по городам
+            vacancy_stats(dict): статистика по профессиям
+        """
     years_stats = {
     }
 
@@ -95,11 +168,20 @@ class InputData:
     }
 
     def start_input(self):
+        """
+                Инициализирование данных по новой профессии
+                """
         self.file_name = input('Введите название файла: ')
         self.profession = input('Введите название профессии: ')
         self.city_count = 0
 
     def count_vacancies(self, vacancies: list):
+        """
+                Подсчёт данных по городам/годам/профессиям
+
+                Args:
+                    vacancies(list): список вакансий
+                """
         for vacancy in vacancies:
             self.city_count += 1
             year = int(vacancy.published_at.year)
@@ -122,6 +204,9 @@ class InputData:
                 self.vacancy_stats[year].count += 1
 
     def update_stats(self):
+        """
+                Обновление данных по городам/годам/профессиям
+                """
         for year in self.years_stats.keys():
             self.years_stats[year].totalSalary = int(self.years_stats[year].totalSalary // self.years_stats[year].count)
 
@@ -141,6 +226,14 @@ class InputData:
 
     
     def print_info(self, str_info: str, dict: dict, value_name: str):
+        """
+                Вывод информации-статистики по годам
+
+                Args:
+                    str_info(str): краткая информация по вакансии
+                    dict(dict): словарь вакансий
+                    value_name(str): имя вакансии
+                """
         marker = False
         print(str_info, end='')
         ind = 0
@@ -157,6 +250,14 @@ class InputData:
             print('}')
 
     def get_city_print(self, str_data: str, dict: dict, names: list, value_name):
+        """
+                Вывод информации-статистики по городам
+
+                Args:
+                    str_info(str): краткая информация по вакансии
+                    dict(dict): словарь вакансий
+                    names(list): список названий вакансий
+                """
         flag = False
         print(str_data, end='')
         ind = 0
@@ -173,6 +274,9 @@ class InputData:
             print('}')
 
     def get_answer(self):
+        """
+                Вывод всей сформированной информации
+                """
 
         cities_sorted = sorted(self.cities_stats, key=lambda x: self.cities_stats[x].totalSalary, reverse=True)
         self.print_info("Динамика уровня зарплат по годам:", self.years_stats, "totalSalary")
@@ -190,6 +294,15 @@ class InputData:
                               cities_sorted, "count")
 
     def get_sorted_cities(self, attr_name: str):
+        """
+                Сортирует вакансии по городам
+
+                Args:
+                    attr_name(str): имя города для сортировки
+
+                Returns:
+                    dic: словарь с вакансиями по городам
+                """
         current = {}
         sorted_names = sorted(self.cities_stats, key=lambda x: getattr(self.cities_stats[x], attr_name), reverse=True)
         del sorted_names[10:]
@@ -199,7 +312,16 @@ class InputData:
 
 
 class Report:
+    """
+        Класс для формирования отчёта по вакансиям
+        """
     def generate_image(self, inputer: InputData, filename: str):
+        """
+                Формирует отчёт в формате Excel по полученным данным
+
+                Args:
+                    inputer(InputData): данные для формирования отчёта
+                """
         plt.rcParams.update({'font.size': 8})
         fig, axis = plt.subplots(2, 2)
         self.define_graphs(inputer, filename, fig, axis)
@@ -207,6 +329,17 @@ class Report:
     
 
     def vertical_graph(self, axis, value_x, value_y_1, value_y_2, name_first, name_second, name):
+        """
+        Строит вертикальный граф, соответствующий какой-либо вакансии
+         Args:
+             axis - оси
+             value_x - первое значение оси OX
+             value_y - первое значение оси OY
+             value_y_2 - второе значение оси OY
+             name_first - имя OX-оси
+             name_second - имя OY-оси
+             name - имя графа
+        """
         axis.grid(axis="y")
         axis.set_title(name, fontsize=16)
         axis.bar([v - 0.2 for v in value_x], value_y_1, label=name_second, width=0.6)
@@ -216,6 +349,13 @@ class Report:
 
     
     def cirle_diagramm(self, axis, names: list, values: list, name):
+        """
+        Строит круговую диаграмму, соответсвующую какой-либо вакансии
+        axis - оси диаграммы
+        names: имена вакансий
+        values: список значений
+        name: имя диаграммы
+        """
         axis.set_title(name, fontsize=18)
         names.append("Другие")
         values.append(1 - sum(values))
@@ -223,6 +363,13 @@ class Report:
         plt.axis('equal')
 
     def zontal_graph(self, axis, value_x, y_val, name):
+        """
+        Строит горизонтальный граф о какой-либо вакансии
+        axis - оси графа
+        value_x - значение по оси OX
+        y_val - значение по оси OY
+        name - имя графа
+        """
         axis.set_title(name, fontsize=18)
         axis.grid(axis="x")
         axis.barh(value_x, y_val)
