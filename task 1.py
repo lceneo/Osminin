@@ -12,7 +12,6 @@ from os import path
 class Vacancy:
     """
     Класс для представления вакансий.
-
     Attributes:
        name (str): название вакансии
        salary (int): зарплата
@@ -35,7 +34,6 @@ class Vacancy:
     def __init__(self, object_vacancy):
         """
             Инициализирует объект класса Vacancy, инициалазируя значениями поля класса
-
             Args:
                 object_vacancy(obj): объект, представляющий основную информацию о вакансии
         """
@@ -50,7 +48,6 @@ class Vacancy:
 class DataSet:
     """
     Класс для формирования набора данных по вакансиям
-
     Attributes:
         file_name(str): название файла с вакансиями
         vacancies_objects(list): список вакансий
@@ -59,7 +56,6 @@ class DataSet:
     def __init__(self, file_name: str, vacancies_objects: list):
         """
         Инициализирует объект DataSet под указанным именем и с переданным набором данных
-
         Args:
             file_name(str): название файла
             vacancies_objects(list): список вакансий
@@ -70,10 +66,8 @@ class DataSet:
     def refactor_html(self, raw_html):
         """
         Очищает текст от html-тегов
-
         Args:
             raw_html: html-разметка
-
         Returns:
             str: Очищенный от html-тегов текст
         """
@@ -82,10 +76,8 @@ class DataSet:
     def csv_read(self):
         """
         Считывает данные из переданного файла
-
         Returns:
             Tuple: пара значений(вакансия - имя вакансии)
-
           """
         vacancies = []
         name_list = []
@@ -118,11 +110,9 @@ class DataSet:
     def csv_filer(self, reader, list_naming):
         """
         Идёт построчно по переданному файлу и заполняет вакансии
-
         Args:
             reader -
             list_naming(list) - список названий вакансий
-
         Returns:
             list: Список сформированных факансий
         """
@@ -138,7 +128,6 @@ class DataSet:
 class Tuple:
     """
     Класс для хранения двух параметров
-
     Attributes:
         totalSalary(int): финальная зарплата
         count(int): номер вакансии
@@ -154,7 +143,6 @@ class Tuple:
 class InputData:
     """
     Класс для формирования статистики по вакансиям(изменения популярности по годам, городам, профессиям)
-
     Attributes:
         years_stats(dict): статистика по годам
         cities_stats(dict): статистика по городам
@@ -181,7 +169,6 @@ class InputData:
     def count_vacancies(self, vacancies: list):
         """
         Подсчёт данных по городам/годам/профессиям
-
         Args:
             vacancies(list): список вакансий
         """
@@ -232,7 +219,6 @@ class InputData:
     def print_info(self, str_info: str, dict: dict, value_name: str):
         """
         Вывод информации-статистики по годам
-
         Args:
             str_info(str): краткая информация по вакансии
             dict(dict): словарь вакансий
@@ -256,7 +242,6 @@ class InputData:
     def get_city_print(self, str_data: str, dict: dict, names: list, value_name):
         """
         Вывод информации-статистики по городам
-
         Args:
             str_info(str): краткая информация по вакансии
             dict(dict): словарь вакансий
@@ -300,10 +285,8 @@ class InputData:
     def get_sorted_cities(self, attr_name: str):
         """
         Сортирует вакансии по городам
-
         Args:
             attr_name(str): имя города для сортировки
-
         Returns:
             dic: словарь с вакансиями по городам
         """
@@ -323,7 +306,6 @@ class Report:
     def generate_excel(self, inputer: InputData):
         """
         Формирует отчёт в формате Excel по полученным данным
-
         Args:
             inputer(InputData): данные для формирования отчёта
         """
@@ -408,22 +390,24 @@ class Report:
         wb.save("report.xlsx")
 
 class Tests(TestCase):
-    def test_salary1(self):
-        self.assertEqual(Vacancy({"name" = "","salary_from" = 12, "salary_to" = 35, "salary_currency" = "RUR", 
-                                  "area_name" = "", "published_at" = datetime.datetime(3,6,7,8,9,10,4)}).salary_from, 12);
-        
-    def test_salary2(self):
-        self.assertEqual(Vacancy({"name" = "","salary_from" = 12, "salary_to" = 35, "salary_currency" = "RUR", 
-                                  "area_name" = "", "published_at" = datetime.datetime(3,6,7,8,9,10,4)}).salary_to, 35);
 
     def test_clean_html(self):
-        self.assertEqual(DataSet("", list()).cleanhtml("<tag>text</tag>"), 'text')
 
+        self.assertEqual(DataSet("", list()).cleanhtml("<tag>text</tag>"), 'text')
+    def test_salary1(self):
+        self.assertEqual(Vacancy({"name" : "","salary_from" : 12, "salary_to" : 35, "salary_currency" : "RUR", 
+                                  "area_name" : "", "published_at" : datetime.datetime(3,6,7,8,9,10,4)}).salary_from, 12);
+        
+    def test_salary2(self):
+        self.assertEqual(Vacancy({"name" : "","salary_from" : 12, "salary_to" : 35, "salary_currency" : "RUR", 
+                                  "area_name" : "", "published_at" : datetime.datetime(3,6,7,8,9,10,4)}).salary_to, 35);
+
+    def test_tuple_2(self):
+        self.assertEqual(Tuple(0, 42).count, 42)       
+                   
     def test_tuple1(self):
         self.assertEqual(Tuple(3210, 1).totalSalary, 3210)
 
-    def test_tuple_2(self):
-        self.assertEqual(Tuple(0, 42).count, 42)
         
  
 inputer = InputData()
@@ -435,4 +419,3 @@ inputer.update_stats()
 inputer.get_answer()
 report = Report()
 report.generate_excel(inputer)
-
