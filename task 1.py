@@ -4,14 +4,15 @@ import openpyxl
 from openpyxl.styles import Font
 from openpyxl.styles.borders import Border, Side
 from builtins import input
-from unittest import TestCase, main
 import re
-from os import path
+from cProfile import Profile
+from pstats import Stats
 
 
 class Vacancy:
     """
     Класс для представления вакансий.
+
     Attributes:
        name (str): название вакансии
        salary (int): зарплата
@@ -34,16 +35,29 @@ class Vacancy:
     def __init__(self, object_vacancy):
         """
             Инициализирует объект класса Vacancy, инициалазируя значениями поля класса
+
             Args:
                 object_vacancy(obj): объект, представляющий основную информацию о вакансии
         """
+
         self.name = object_vacancy['name']
         salary_from = (int)((float)("".join(object_vacancy['salary_from'].split())))
         salary_to = (int)((float)("".join(object_vacancy['salary_to'].split())))
         self.salary = (salary_from + salary_to) * self.currency_to_rub[object_vacancy['salary_currency']] // 2
         self.area_name = object_vacancy['area_name']
-        self.published_at = datetime.datetime.strptime(object_vacancy['published_at'], '%Y-%m-%dT%H:%M:%S%z')
-
+        #self.published_at = datetime.datetime.strptime(object_vacancy['published_at'], '%Y-%m-%dT%H:%M:%S%z')
+        #self.published_at = self.timearea_parse(object_vacancy['published_at'])
+        self.published_at = self.datetime_parse(object_vacancy['published_at'])
+    
+    def datetime_parse(self, date: str):
+        return datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]), int(date[11:13]),
+                                 int(date[14:16]), int(date[17:19]), int(date[19:22]))
+    
+    def timearea_parse(self, date: str):
+        hms = [int(key) for key in (date.split('T')[1]).split('+')[0].split(':')]
+        ydm = [int(key) for key in (date.split('T')[0]).split('-')]
+        timearea = int(date[19:22])
+        return datetime.datetime(ydm[0], ydm[1], ydm[2], hms[0], hms[1], hms[2], timearea)
 
 class DataSet:
     """
@@ -419,3 +433,19 @@ inputer.update_stats()
 inputer.get_answer()
 report = Report()
 report.generate_excel(inputer)
+profile = Profile()
+inputer = InputData()
+profile.disable()
+inputer.start_input()
+profile.enable()
+dataset = DataSet(inputer.file_name, list())
+dataset.fill_vacancies()
+inputer.count_vacancies(dataset.vacancies_objects)
+inputer.update_stats()
+inputer.get_answer()
+profile.disable()
+profile.dump_stats('mystats.stats')
+with open('mystats_output.txt', 'wt') as output:
+    stats = Stats('mystats.stats', stream=output)
+    stats.sort_stats('cumulative', 'time')
+    stats.print_stats()
