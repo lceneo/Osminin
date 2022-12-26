@@ -12,3 +12,8 @@
 
 Метод datetime_parse дал улучшение производительности в 7.5 раз по сравнению с оригинальным методом
 ![image](https://user-images.githubusercontent.com/94864786/208408826-63da1625-2efa-4e50-9ce9-b2a8b9f68986.png)
+
+
+3.2.1:
+
+![image](https://user-images.githubusercontent.com/94864786/209554548-ac3d5fbf-d0f5-47a6-96dd-1a9f095c1fae.png)
