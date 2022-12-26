@@ -17,3 +17,13 @@
 3.2.1:
 
 ![image](https://user-images.githubusercontent.com/94864786/209554548-ac3d5fbf-d0f5-47a6-96dd-1a9f095c1fae.png)
+
+
+3.2.2:
+
+До многопроцессорности
+![image](https://user-images.githubusercontent.com/94864786/209555046-88d54538-c827-471b-9071-cda9e2bf5caa.png)
+
+C многопорцессорностью
+![image](https://user-images.githubusercontent.com/94864786/209555481-e142f113-fdb8-4fd4-af60-340c400b31e5.png)
+
