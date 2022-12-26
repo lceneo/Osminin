@@ -27,3 +27,7 @@
 C многопорцессорностью
 ![image](https://user-images.githubusercontent.com/94864786/209555481-e142f113-fdb8-4fd4-af60-340c400b31e5.png)
 
+3.2.3:
+
+Concurrent futures:
+![image](https://user-images.githubusercontent.com/94864786/209555911-ef23cf00-9615-4f93-97c8-069f63506322.png)
