@@ -5,9 +5,16 @@ from openpyxl.styles import Font
 from openpyxl.styles.borders import Border, Side
 from builtins import input
 import re
+from os import listdir
 from cProfile import Profile
+from multiprocessing import Process
 from pstats import Stats
 
+
+def multi_proccessing(f_name, my_inputter):
+    info_set = DataSet(f_name, list())
+    info_set.fill_vacancies()
+    my_inputter.count_vacancies(info_set.vacancies_objects)
 
 class Vacancy:
     """
@@ -402,7 +409,7 @@ class Report:
             list[f"E{ind}"].border = thin_border
             ind = ind + 1
         wb.save("report.xlsx")
-
+        
 class Tests(TestCase):
 
     def test_clean_html(self):
@@ -421,7 +428,6 @@ class Tests(TestCase):
                    
     def test_tuple1(self):
         self.assertEqual(Tuple(3210, 1).totalSalary, 3210)
-
         
  
 inputer = InputData()
@@ -438,6 +444,9 @@ inputer = InputData()
 profile.disable()
 inputer.start_input()
 profile.enable()
+multiP = Process(target=multi_proccessing, args=(listdir(f'./{inputer.file_name}'),inputer))
+multiP.start()
+multiP.join()
 dataset = DataSet(inputer.file_name, list())
 dataset.fill_vacancies()
 inputer.count_vacancies(dataset.vacancies_objects)
