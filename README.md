@@ -36,3 +36,6 @@ Concurrent futures:
 3.3.1:
 
 ![image](https://user-images.githubusercontent.com/94864786/209678040-0de09856-46ae-4547-a56c-ab4ec7a91a5b.png)
+
+3.3.2:
+В папке "salary_stats"
