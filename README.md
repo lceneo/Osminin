@@ -42,6 +42,6 @@ Concurrent futures:
 
 
 3.3.3:
-ВЕСЬ файл полностью не влез по размеру(часть файла в папке hh)
+Файла в папке "hh"
 ![image](https://user-images.githubusercontent.com/94864786/209706565-7c85a485-c566-4cf6-82b5-c1472fc73537.png)
 
