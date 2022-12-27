@@ -39,3 +39,9 @@ Concurrent futures:
 
 3.3.2:
 В папке "salary_stats"
+
+
+3.3.3:
+файл не влез по размеру
+![image](https://user-images.githubusercontent.com/94864786/209706298-89de994e-173d-4c54-9b50-142966c0690e.png)
+
