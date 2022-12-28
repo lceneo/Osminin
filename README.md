@@ -45,3 +45,7 @@ Concurrent futures:
 Файла в папке "hh"
 ![image](https://user-images.githubusercontent.com/94864786/209706565-7c85a485-c566-4cf6-82b5-c1472fc73537.png)
 
+3.4.2: 
+Фулл отчёт в папке "reports"
+
+![image](https://user-images.githubusercontent.com/94864786/209802134-e8dc350a-224a-4262-a98c-97fa385159d3.png)
