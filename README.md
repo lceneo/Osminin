@@ -53,3 +53,8 @@ Concurrent futures:
 Фулл отчёт в папке "reports"
 
 ![image](https://user-images.githubusercontent.com/94864786/209802134-e8dc350a-224a-4262-a98c-97fa385159d3.png)
+
+3.4.3:
+
+
+[city_report.pdf](https://github.com/lceneo/Osminin/files/10318681/city_report.pdf)
