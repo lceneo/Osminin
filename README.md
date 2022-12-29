@@ -45,6 +45,10 @@ Concurrent futures:
 Файла в папке "hh"
 ![image](https://user-images.githubusercontent.com/94864786/209706565-7c85a485-c566-4cf6-82b5-c1472fc73537.png)
 
+3.4.1:
+
+[first100_vacancies.csv](https://github.com/lceneo/Osminin/files/10318668/first100_vacancies.csv)
+
 3.4.2: 
 Фулл отчёт в папке "reports"
 
