@@ -62,3 +62,6 @@ Concurrent futures:
 3.5.1:
 
 в папке sql
+
+3.5.2:
+![image](https://user-images.githubusercontent.com/94864786/210130988-177415d8-0e01-484c-8f91-706b48782f16.png)
